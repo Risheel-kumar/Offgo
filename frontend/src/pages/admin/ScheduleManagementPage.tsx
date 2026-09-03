@@ -11,7 +11,7 @@ import { CreateSchedulePayload } from '../../types';
 const today = new Date().toISOString().slice(0, 10);
 
 export const ScheduleManagementPage: React.FC = () => {
-  const { allShuttles } = useShuttles();
+  const { allShuttles, isLoading: isShuttlesLoading, isError: isShuttlesError } = useShuttles();
   const { allSchedules, isLoading, isError } = useSchedules();
   const createSchedule = useCreateSchedule();
   const [form, setForm] = useState<CreateSchedulePayload>({
@@ -48,7 +48,7 @@ export const ScheduleManagementPage: React.FC = () => {
           update('shuttleId', value);
           update('routeId', shuttle?.assignedRoute?.id || '');
           update('driverId', shuttle?.assignedDriver?.id || '');
-        }} options={allShuttles.filter((shuttle) => shuttle.status !== 'MAINTENANCE' && shuttle.assignedRoute && shuttle.assignedDriver).map((shuttle) => ({ value: shuttle.id, label: shuttle.vehicleNumber }))} />
+        }} disabled={isShuttlesLoading || isShuttlesError} options={allShuttles.filter((shuttle) => shuttle.status !== 'MAINTENANCE').map((shuttle) => ({ value: shuttle.id, label: shuttle.vehicleNumber }))} />
         <div className="rounded-lg border border-slate-200 dark:border-slate-800 p-3 text-sm"><div className="flex items-center gap-2 text-xs text-slate-500"><RouteIcon className="w-3.5 h-3.5" /> Existing assignment</div><p className="mt-1 font-semibold">{selectedShuttle?.assignedRoute?.name || 'Select a configured shuttle'}</p><p className="text-xs text-slate-500"><UserRound className="mr-1 inline w-3.5 h-3.5" />{selectedShuttle?.assignedDriver?.name || 'Driver assigned in Shuttle Management'}</p></div>
         <Field label="Start date" type="date" value={form.startDate || ''} onChange={(value) => update('startDate', value)} />
         <Field label="End date" type="date" value={form.endDate || ''} onChange={(value) => update('endDate', value)} />
@@ -65,5 +65,5 @@ export const ScheduleManagementPage: React.FC = () => {
   </div>;
 };
 
-const Select: React.FC<{ label: string; icon: React.ReactNode; value: string; onChange: (value: string) => void; options: { value: string; label: string }[] }> = ({ label, icon, value, onChange, options }) => <label className="text-xs font-semibold text-slate-700 dark:text-slate-300"><span className="mb-1 flex items-center gap-1.5">{icon}{label}</span><select required value={value} onChange={(event) => onChange(event.target.value)} className="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 py-2 text-sm"><option value="">Select {label.toLowerCase()}</option>{options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label>;
+const Select: React.FC<{ label: string; icon: React.ReactNode; value: string; onChange: (value: string) => void; options: { value: string; label: string }[]; disabled?: boolean }> = ({ label, icon, value, onChange, options, disabled = false }) => <label className="text-xs font-semibold text-slate-700 dark:text-slate-300"><span className="mb-1 flex items-center gap-1.5">{icon}{label}</span><select required disabled={disabled} value={value} onChange={(event) => onChange(event.target.value)} className="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 py-2 text-sm"><option value="">{disabled ? 'Unable to load shuttles' : options.length ? `Select ${label.toLowerCase()}` : 'No shuttles configured'}</option>{options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label>;
 const Field: React.FC<{ label: string; type: string; value: string; onChange: (value: string) => void }> = ({ label, type, value, onChange }) => <label className="text-xs font-semibold text-slate-700 dark:text-slate-300"><span className="mb-1 flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" />{label}</span><input required type={type} value={value} onChange={(event) => onChange(event.target.value)} className="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 py-2 text-sm" /></label>;
