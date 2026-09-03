@@ -2,14 +2,13 @@ package com.offgo.backend.config;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.UUID;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalTime;
-import java.util.List;
-import java.util.UUID;
 
 import com.offgo.backend.entity.Booking;
 import com.offgo.backend.entity.Driver;
@@ -68,7 +67,31 @@ public class DataInitializer implements CommandLineRunner {
         seedStops();
         seedRouteStops();
         seedSchedules();
+        synchronizeShuttleAssignments();
         seedBookings();
+    }
+
+    private void synchronizeShuttleAssignments() {
+        for (Schedule schedule : scheduleRepository.findAll()) {
+            Shuttle shuttle = schedule.getShuttle();
+            Driver driver = schedule.getDriver();
+            Route route = schedule.getRoute();
+
+            if (shuttle == null) {
+                continue;
+            }
+
+            if (shuttle.getRoute() == null && route != null) {
+                shuttle.setRoute(route);
+            }
+
+            if (shuttle.getDriver() == null && driver != null && driver.getShuttle() == null) {
+                driver.setShuttle(shuttle);
+                driverRepository.save(driver);
+            }
+
+            shuttleRepository.save(shuttle);
+        }
     }
 
     private void seedUsers() {
