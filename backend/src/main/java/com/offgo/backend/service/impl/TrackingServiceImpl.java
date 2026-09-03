@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -49,8 +48,6 @@ private final ShuttleLocationRepository shuttleLocationRepository;
 
 
 private final ScheduleRepository scheduleRepository;
-
-private final SimpMessagingTemplate messagingTemplate;
 
     @Override
     public ApiResponse<UpdateLocationResponse> updateLocation(
@@ -127,6 +124,8 @@ private final SimpMessagingTemplate messagingTemplate;
                                                 .getVehicleNumber())
                                 .latitude(location.getLatitude())
                                 .longitude(location.getLongitude())
+                                .speed(location.getSpeed())
+                                .heading(location.getHeading())
                                 .updatedAt(location.getRecordedAt())
                                 .build())
                 .build();
@@ -246,10 +245,18 @@ private final SimpMessagingTemplate messagingTemplate;
 
         int index = stops.indexOf(nearest);
 
+        if (nearest == null || nearest.getStop() == null) {
+                throw new ResourceNotFoundException("No valid route stop configured");
+        }
+
         if (index < stops.size() - 1) {
 
                 nextStop = stops.get(index + 1);
 
+        }
+
+        if (nextStop == null || nextStop.getStop() == null) {
+                nextStop = nearest;
         }
 
         CurrentStopResponse response =
@@ -279,41 +286,45 @@ private final SimpMessagingTemplate messagingTemplate;
 
         @Override
         public ApiResponse<List<LiveFleetLocationResponse>> getLiveFleetLocations() {
-
-        List<ShuttleLocation> locations =
-                shuttleLocationRepository.findAllByOrderByRecordedAtDesc();
-
-        Map<UUID, LiveFleetLocationResponse> latestLocations =
-                new LinkedHashMap<>();
-
-        for (ShuttleLocation location : locations) {
-
-                UUID shuttleId = location.getShuttle().getId();
-
-                if (!latestLocations.containsKey(shuttleId)) {
-
-                latestLocations.put(
-                        shuttleId,
-                        LiveFleetLocationResponse.builder()
-                                .shuttleId(shuttleId)
-                                .vehicleNumber(
-                                        location.getShuttle().getVehicleNumber())
-                                .latitude(location.getLatitude())
-                                .longitude(location.getLongitude())
-                                .speed(location.getSpeed())
-                                .heading(location.getHeading())
-                                .updatedAt(location.getRecordedAt())
-                                .build()
-                );
-
+                Map<UUID, ShuttleLocation> latestLocations = new LinkedHashMap<>();
+                for (ShuttleLocation location : shuttleLocationRepository.findAllByOrderByRecordedAtDesc()) {
+                        latestLocations.putIfAbsent(location.getShuttle().getId(), location);
                 }
 
-        }
+                List<LiveFleetLocationResponse> response = shuttleRepository.findAll().stream().map(shuttle -> {
+                        ShuttleLocation location = latestLocations.get(shuttle.getId());
+                        var schedule = scheduleRepository.findByShuttleId(shuttle.getId()).stream().findFirst().orElse(null);
+                        var route = shuttle.getRoute() != null ? shuttle.getRoute() : schedule != null ? schedule.getRoute() : null;
+                        var driver = shuttle.getDriver();
+                        Double speed = location != null ? location.getSpeed() : null;
+                        Double heading = location != null ? location.getHeading() : null;
+                        return LiveFleetLocationResponse.builder()
+                                .shuttleId(shuttle.getId())
+                                .vehicleNumber(shuttle.getVehicleNumber())
+                                .latitude(location != null ? location.getLatitude() : shuttle.getLatitude())
+                                .longitude(location != null ? location.getLongitude() : shuttle.getLongitude())
+                                .speed(speed)
+                                .heading(heading)
+                                .updatedAt(location != null ? location.getRecordedAt() : shuttle.getLastLocationUpdate())
+                                .driverId(driver != null ? driver.getId().toString() : null)
+                                .driverName(driver != null ? driver.getFirstName() + " " + driver.getLastName() : null)
+                                .driverPhone(driver != null ? driver.getPhoneNumber() : null)
+                                .routeId(route != null ? route.getId().toString() : null)
+                                .routeName(route != null ? route.getRouteName() : null)
+                                .routeCode(route != null ? route.getRouteCode() : null)
+                                .shuttleStatus(shuttle.getStatus() != null ? shuttle.getStatus().name() : null)
+                                .shuttleActive(shuttle.isActive())
+                                .trackingEnabled(shuttle.isTrackingEnabled())
+                                .departureTime(schedule != null ? schedule.getDepartureTime() : null)
+                                .arrivalTime(schedule != null ? schedule.getArrivalTime() : null)
+                                .scheduleStatus(schedule != null ? schedule.getStatus().name() : null)
+                                .build();
+                }).toList();
 
         return ApiResponse.<List<LiveFleetLocationResponse>>builder()
                 .success(true)
                 .message("Live fleet locations fetched successfully")
-                .data(List.copyOf(latestLocations.values()))
+                .data(response)
                 .build();
         }
 }

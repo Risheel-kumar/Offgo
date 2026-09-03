@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.offgo.backend.entity.RouteStop;
 
@@ -16,5 +17,10 @@ public interface RouteStopRepository extends JpaRepository<RouteStop, UUID> {
     boolean existsByRouteIdAndStopId(
             UUID routeId,
             UUID stopId);
+
+    java.util.Optional<RouteStop> findByRouteIdAndStopId(UUID routeId, UUID stopId);
+
+    @Transactional
+    void deleteByRouteIdAndStopId(UUID routeId, UUID stopId);
 
 }

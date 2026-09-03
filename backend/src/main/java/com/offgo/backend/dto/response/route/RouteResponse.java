@@ -30,4 +30,8 @@ public class RouteResponse {
 
     private boolean active;
 
+    private UUID driverId;
+
+    private String driverName;
+
 }

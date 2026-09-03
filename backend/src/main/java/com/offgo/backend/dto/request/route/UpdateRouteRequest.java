@@ -1,6 +1,7 @@
 package com.offgo.backend.dto.request.route;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
@@ -27,5 +28,7 @@ public class UpdateRouteRequest {
     @NotNull
     @Min(1)
     private Integer estimatedDurationMinutes;
+
+    private UUID driverId;
 
 }

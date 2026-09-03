@@ -1,0 +1,6 @@
+{
+  "name": "Off-Go Shuttle Platform",
+  "description": "AI-Powered Corporate Shuttle Management Platform SaaS",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

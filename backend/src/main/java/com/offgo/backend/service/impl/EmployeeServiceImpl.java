@@ -15,7 +15,6 @@ import com.offgo.backend.repository.EmployeeRepository;
 import com.offgo.backend.service.employee.EmployeeService;
 import com.offgo.backend.validator.EmployeeValidator;
 import lombok.extern.slf4j.Slf4j;
-import com.offgo.backend.constants.LogMessages;
 import lombok.RequiredArgsConstructor;
 
 @Slf4j
@@ -48,6 +47,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         log.info("Fetching all employees");
         List<EmployeeResponse> employees = employeeRepository.findAll()
                 .stream()
+                .filter(Employee::isActive)
                 .map(employeeMapper::toResponse)
                 .toList();
 

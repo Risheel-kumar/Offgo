@@ -16,6 +16,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,10 +45,10 @@ public class Route extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String routeName;
 
-    @Column(nullable = false, length = 150)
+    @Column(nullable = false, length = 500)
     private String source;
 
-    @Column(nullable = false, length = 150)
+    @Column(nullable = false, length = 500)
     private String destination;
 
     @Column(nullable = false, precision = 6, scale = 2)
@@ -62,6 +65,10 @@ public class Route extends BaseEntity {
     @Builder.Default
     @Column(nullable = false)
     private boolean active = true;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "driver_id")
+    private Driver driver;
 
     @OneToMany(
         mappedBy = "route",

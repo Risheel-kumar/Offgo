@@ -3,6 +3,7 @@ package com.offgo.backend.entity;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.offgo.backend.enums.DriverStatus;
 
 import jakarta.persistence.Column;
@@ -13,6 +14,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,6 +48,14 @@ public class Driver extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
+    /**
+     * BCrypt hash used for the driver's login account. It must never be included
+     * in an API response.
+     */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Column(nullable = false, length = 100)
+    private String password;
+
     @Column(nullable = false, unique = true)
     private String phoneNumber;
 
@@ -64,5 +76,9 @@ public class Driver extends BaseEntity {
     @Builder.Default
     @Column(nullable = false)
     private boolean active = true;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "shuttle_id")
+    private Shuttle shuttle;
 
 }

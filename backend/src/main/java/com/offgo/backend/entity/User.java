@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.offgo.backend.enums.Role;
-
+import com.offgo.backend.enums.UserStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -20,6 +20,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+
 
 @Entity
 @Table(name = "users")
@@ -51,9 +53,20 @@ public class User extends BaseEntity {
     @Column(nullable = false, unique = true, length = 10)
     private String phoneNumber;
 
+    @Column(nullable = false, unique = true)
+    private String employeeId;
+
+    @Column(nullable = false)
+    private String department;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private Role role;
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    @Column(nullable = false)
+    private UserStatus status = UserStatus.ACTIVE;
 
     @Builder.Default
     @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")

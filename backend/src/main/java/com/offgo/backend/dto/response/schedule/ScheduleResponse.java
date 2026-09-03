@@ -15,6 +15,14 @@ public class ScheduleResponse {
 
     private UUID id;
 
+    private UUID routeId;
+
+    private UUID driverId;
+
+    private UUID shuttleId;
+
+    private Boolean trackingEnabled;
+
     private String routeName;
 
     private String driverName;

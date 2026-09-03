@@ -5,9 +5,12 @@ import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +21,7 @@ import com.offgo.backend.dto.request.shuttle.UpdateShuttleRequest;
 import com.offgo.backend.dto.response.ApiResponse;
 import com.offgo.backend.dto.response.shuttle.ShuttleResponse;
 import com.offgo.backend.service.shuttle.ShuttleService;
+import com.offgo.backend.enums.ShuttleStatus;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -63,4 +67,17 @@ public class ShuttleController {
                 shuttleService.updateShuttle(id, request));
 
     }
+
+        @PatchMapping("/{id}/status")
+        public ResponseEntity<ApiResponse<ShuttleResponse>> updateStatus(
+                        @PathVariable UUID id,
+                        @RequestParam ShuttleStatus status) {
+                return ResponseEntity.ok(shuttleService.updateStatus(id, status));
+        }
+
+        @DeleteMapping("/{id}")
+        public ResponseEntity<Void> deleteShuttle(@PathVariable UUID id) {
+                shuttleService.deleteShuttle(id);
+                return ResponseEntity.noContent().build();
+        }
 }

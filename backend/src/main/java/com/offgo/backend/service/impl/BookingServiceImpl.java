@@ -1,17 +1,20 @@
 package com.offgo.backend.service.impl;
 
 import java.time.LocalDateTime;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.UUID;
+
 import com.offgo.backend.dto.request.booking.CreateBookingRequest;
 import com.offgo.backend.dto.response.ApiResponse;
 import com.offgo.backend.dto.response.booking.BookingResponse;
 import com.offgo.backend.entity.Booking;
 import com.offgo.backend.entity.Employee;
+import com.offgo.backend.entity.Notification;
 import com.offgo.backend.entity.Schedule;
 import com.offgo.backend.entity.Shuttle;
 import com.offgo.backend.enums.BookingStatus;
@@ -24,12 +27,12 @@ import com.offgo.backend.repository.EmployeeRepository;
 import com.offgo.backend.repository.ScheduleRepository;
 import com.offgo.backend.repository.ShuttleRepository;
 import com.offgo.backend.service.booking.BookingService;
-import com.offgo.backend.validator.BookingValidator;
 import com.offgo.backend.service.notification.NotificationService;
+import com.offgo.backend.validator.BookingValidator;
+
 import lombok.RequiredArgsConstructor;
-import com.offgo.backend.entity.Notification;
-import com.offgo.backend.enums.NotificationType;
 import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -44,83 +47,60 @@ public class BookingServiceImpl implements BookingService {
     private final BookingValidator bookingValidator;
     private final NotificationService notificationService;
 
+        private BookingResponse mapBookingSafely(Booking booking) {
+                try {
+                        return bookingMapper.toResponse(booking);
+                } catch (RuntimeException exception) {
+                        log.warn("Skipping booking {} because it could not be mapped: {}", booking.getId(), exception.getMessage());
+                        return null;
+                }
+        }
+
     @Override
     public ApiResponse<BookingResponse> createBooking(CreateBookingRequest request) {
-
         bookingValidator.validate(request);
-
         Employee employee = employeeRepository.findById(request.getEmployeeId())
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Employee not found"));
-
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
         Schedule schedule = scheduleRepository.findById(request.getScheduleId())
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Schedule not found"));
-
+                .orElseThrow(() -> new ResourceNotFoundException("Schedule not found"));
         Shuttle shuttle = schedule.getShuttle();
-
         if (shuttle.getAvailableSeats() <= 0) {
             throw new BadRequestException("No seats available.");
         }
 
-        int bookedSeats = bookingRepository
-                .findByScheduleIdAndStatus(
-                        schedule.getId(),
-                        BookingStatus.BOOKED)
-                .size();
-
-        int nextSeat = bookedSeats + 1;
-
+        int reservedSeats = bookingRepository.findByScheduleIdAndStatus(schedule.getId(), BookingStatus.APPROVED).size();
         Booking booking = Booking.builder()
-        .employee(employee)
-        .schedule(schedule)
-        .seatNumber(nextSeat)
-        .status(BookingStatus.BOOKED)
-        .qrToken(UUID.randomUUID().toString())
-        .qrGeneratedAt(LocalDateTime.now())
-        .qrUsed(false)
-        .build();
-
+                .employee(employee)
+                .schedule(schedule)
+                .seatNumber(reservedSeats + 1)
+                .status(BookingStatus.PENDING)
+                .qrToken(UUID.randomUUID().toString())
+                .qrGeneratedAt(LocalDateTime.now())
+                .qrUsed(false)
+                .transportChargeInr(BigDecimal.valueOf(schedule.getRoute().getDistanceKm().doubleValue() * 7))
+                .build();
         bookingRepository.save(booking);
 
-
-
-        shuttle.setAvailableSeats(
-                shuttle.getAvailableSeats() - 1);
-
-        shuttleRepository.save(shuttle);
-
-        notificationService.createNotification(
-
-                Notification.builder()
-                        .userId(employee.getId())
-                        .type(NotificationType.BOOKING)
-                        .title("Booking Confirmed")
-                        .message(
-                                "Seat "
-                                        + booking.getSeatNumber()
-                                        + " has been reserved.")
-                        .build()
-
-        );
+        notificationService.createNotification(Notification.builder()
+                .userId(employee.getId())
+                .type(NotificationType.BOOKING)
+                .title("Booking Pending Approval")
+                .message("Your shuttle booking request is awaiting administrator approval.")
+                .build());
 
         return ApiResponse.<BookingResponse>builder()
                 .success(true)
-                .message("Booking Successful")
+                .message("Booking submitted for approval")
                 .data(bookingMapper.toResponse(booking))
                 .build();
     }
 
     @Override
     public ApiResponse<List<BookingResponse>> getAllBookings() {
-        log.info(
-        "Fetching all bookings");
-        List<BookingResponse> bookings =
-                bookingRepository.findAll()
-                        .stream()
-                        .map(bookingMapper::toResponse)
-                        .toList();
-
+        List<BookingResponse> bookings = bookingRepository.findAll().stream()
+                .map(this::mapBookingSafely)
+                .filter(Objects::nonNull)
+                .toList();
         return ApiResponse.<List<BookingResponse>>builder()
                 .success(true)
                 .message("Bookings fetched successfully")
@@ -129,14 +109,22 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public ApiResponse<BookingResponse> getBookingById(UUID id) {
-        log.info(
-        "Fetching booking {}",
-        id);
-        Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Booking not found"));
+    public ApiResponse<List<BookingResponse>> getBookingsByEmployeeId(UUID employeeId) {
+        List<BookingResponse> bookings = bookingRepository.findByEmployeeId(employeeId).stream()
+                .map(this::mapBookingSafely)
+                .filter(Objects::nonNull)
+                .toList();
+        return ApiResponse.<List<BookingResponse>>builder()
+                .success(true)
+                .message("Employee bookings fetched successfully")
+                .data(bookings)
+                .build();
+    }
 
+    @Override
+    public ApiResponse<BookingResponse> getBookingById(UUID id) {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
         return ApiResponse.<BookingResponse>builder()
                 .success(true)
                 .message("Booking fetched successfully")
@@ -146,31 +134,19 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public ApiResponse<String> cancelBooking(UUID id) {
-        log.info(
-        "Cancelling booking {}",
-        id);
         Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Booking not found"));
-
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
         if (booking.getStatus() == BookingStatus.CANCELLED) {
-
-            throw new BadRequestException(
-                    "Booking already cancelled.");
+            throw new BadRequestException("Booking already cancelled.");
         }
-
+        BookingStatus previous = booking.getStatus();
         booking.setStatus(BookingStatus.CANCELLED);
-
-        Shuttle shuttle = booking.getSchedule().getShuttle();
-
-        shuttle.setAvailableSeats(
-                shuttle.getAvailableSeats() + 1);
-
-        shuttleRepository.save(shuttle);
-
+        if (previous == BookingStatus.APPROVED || previous == BookingStatus.BOOKED) {
+            Shuttle shuttle = booking.getSchedule().getShuttle();
+            shuttle.setAvailableSeats(shuttle.getAvailableSeats() + 1);
+            shuttleRepository.save(shuttle);
+        }
         bookingRepository.save(booking);
-        log.info(
-        "Booking cancelled");
         return ApiResponse.<String>builder()
                 .success(true)
                 .message("Booking Cancelled")
@@ -178,4 +154,27 @@ public class BookingServiceImpl implements BookingService {
                 .build();
     }
 
+    @Override
+    public ApiResponse<BookingResponse> updateStatus(UUID id, BookingStatus status) {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+        BookingStatus previous = booking.getStatus();
+        Shuttle shuttle = booking.getSchedule().getShuttle();
+        if (status == BookingStatus.APPROVED && previous != BookingStatus.APPROVED) {
+            if (shuttle.getAvailableSeats() <= 0) {
+                throw new BadRequestException("No seats available.");
+            }
+            shuttle.setAvailableSeats(shuttle.getAvailableSeats() - 1);
+            shuttleRepository.save(shuttle);
+        } else if (status == BookingStatus.REJECTED && previous == BookingStatus.APPROVED) {
+            shuttle.setAvailableSeats(shuttle.getAvailableSeats() + 1);
+            shuttleRepository.save(shuttle);
+        }
+        booking.setStatus(status);
+        return ApiResponse.<BookingResponse>builder()
+                .success(true)
+                .message("Booking status updated")
+                .data(bookingMapper.toResponse(bookingRepository.save(booking)))
+                .build();
+    }
 }

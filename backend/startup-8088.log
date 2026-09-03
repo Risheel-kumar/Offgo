@@ -1,0 +1,244 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.16)
+
+2026-09-01T20:22:18.376+05:30  INFO 13596 --- [offgo-backend] [           main] com.offgo.backend.BackendApplication     : Starting BackendApplication v0.0.1-SNAPSHOT using Java 21.0.4 with PID 13596 (D:\projects\Off-Go\Implementation final\Implementation\backend\target\backend-0.0.1-SNAPSHOT.jar started by rishe in D:\projects\Off-Go\Implementation final\Implementation\backend)
+2026-09-01T20:22:18.380+05:30  INFO 13596 --- [offgo-backend] [           main] com.offgo.backend.BackendApplication     : No active profile set, falling back to 1 default profile: "default"
+2026-09-01T20:22:20.003+05:30  INFO 13596 --- [offgo-backend] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-01T20:22:20.180+05:30  INFO 13596 --- [offgo-backend] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 161 ms. Found 13 JPA repository interfaces.
+2026-09-01T20:22:21.472+05:30  INFO 13596 --- [offgo-backend] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8088 (http)
+2026-09-01T20:22:21.499+05:30  INFO 13596 --- [offgo-backend] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-09-01T20:22:21.499+05:30  INFO 13596 --- [offgo-backend] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.55]
+2026-09-01T20:22:21.542+05:30  INFO 13596 --- [offgo-backend] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-09-01T20:22:21.545+05:30  INFO 13596 --- [offgo-backend] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3078 ms
+2026-09-01T20:22:21.791+05:30  INFO 13596 --- [offgo-backend] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-01T20:22:21.903+05:30  INFO 13596 --- [offgo-backend] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.53.Final
+2026-09-01T20:22:21.964+05:30  INFO 13596 --- [offgo-backend] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-09-01T20:22:22.380+05:30  INFO 13596 --- [offgo-backend] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-01T20:22:22.414+05:30  INFO 13596 --- [offgo-backend] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-09-01T20:22:23.085+05:30  INFO 13596 --- [offgo-backend] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@18d22ecf
+2026-09-01T20:22:23.106+05:30  INFO 13596 --- [offgo-backend] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-09-01T20:22:23.344+05:30  INFO 13596 --- [offgo-backend] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 18.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-09-01T20:22:27.430+05:30  INFO 13596 --- [offgo-backend] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-01T20:22:27.882+05:30  INFO 13596 --- [offgo-backend] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-01T20:22:29.292+05:30  INFO 13596 --- [offgo-backend] [           main] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-09-01T20:22:29.294+05:30  WARN 13596 --- [offgo-backend] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-09-01T20:22:29.789+05:30  INFO 13596 --- [offgo-backend] [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-09-01T20:22:31.452+05:30 DEBUG 13596 --- [offgo-backend] [           main] o.s.w.s.s.s.WebSocketHandlerMapping      : Patterns [/ws] in 'stompWebSocketHandlerMapping'
+2026-09-01T20:22:31.945+05:30 DEBUG 13596 --- [offgo-backend] [           main] .WebSocketAnnotationMethodMessageHandler : 
+	c.o.b.c.TestController:
+	
+2026-09-01T20:22:31.949+05:30 DEBUG 13596 --- [offgo-backend] [           main] .WebSocketAnnotationMethodMessageHandler : 
+	c.o.b.c.a.AdminApprovalController:
+	
+2026-09-01T20:22:31.950+05:30 DEBUG 13596 --- [offgo-backend] [           main] .WebSocketAnnotationMethodMessageHandler : 
+	c.o.b.c.a.AuthenticationController:
+	
+2026-09-01T20:22:31.952+05:30 DEBUG 13596 --- [offgo-backend] [           main] .WebSocketAnnotationMethodMessageHandler : 
+	c.o.b.c.b.BookingController:
+	
+2026-09-01T20:22:31.953+05:30 DEBUG 13596 --- [offgo-backend] [           main] .WebSocketAnnotationMethodMessageHandler : 
+	c.o.b.c.c.ComplaintController:
+	
+2026-09-01T20:22:31.954+05:30 DEBUG 13596 --- [offgo-backend] [           main] .WebSocketAnnotationMethodMessageHandler : 
+	c.o.b.c.d.DashboardController:
+	
+2026-09-01T20:22:31.955+05:30 DEBUG 13596 --- [offgo-backend] [           main] .WebSocketAnnotationMethodMessageHandler : 
+	c.o.b.c.d.DriverController:
+	
+2026-09-01T20:22:31.957+05:30 DEBUG 13596 --- [offgo-backend] [           main] .WebSocketAnnotationMethodMessageHandler : 
+	c.o.b.c.e.EmployeeController:
+	
+2026-09-01T20:22:31.959+05:30 DEBUG 13596 --- [offgo-backend] [           main] .WebSocketAnnotationMethodMessageHandler : 
+	c.o.b.c.e.ETAController:
+	
+2026-09-01T20:22:31.961+05:30 DEBUG 13596 --- [offgo-backend] [           main] .WebSocketAnnotationMethodMessageHandler : 
+	c.o.b.c.n.NotificationController:
+	
+2026-09-01T20:22:31.964+05:30 DEBUG 13596 --- [offgo-backend] [           main] .WebSocketAnnotationMethodMessageHandler : 
+	c.o.b.c.q.QRCodeController:
+	
+2026-09-01T20:22:31.966+05:30 DEBUG 13596 --- [offgo-backend] [           main] .WebSocketAnnotationMethodMessageHandler : 
+	c.o.b.c.r.RouteController:
+	
+2026-09-01T20:22:31.968+05:30 DEBUG 13596 --- [offgo-backend] [           main] .WebSocketAnnotationMethodMessageHandler : 
+	c.o.b.c.r.RouteStopController:
+	
+2026-09-01T20:22:31.970+05:30 DEBUG 13596 --- [offgo-backend] [           main] .WebSocketAnnotationMethodMessageHandler : 
+	c.o.b.c.s.ScheduleController:
+	
+2026-09-01T20:22:31.972+05:30 DEBUG 13596 --- [offgo-backend] [           main] .WebSocketAnnotationMethodMessageHandler : 
+	c.o.b.c.s.ShuttleController:
+	
+2026-09-01T20:22:31.973+05:30 DEBUG 13596 --- [offgo-backend] [           main] .WebSocketAnnotationMethodMessageHandler : 
+	c.o.b.c.s.StopController:
+	
+2026-09-01T20:22:31.974+05:30 DEBUG 13596 --- [offgo-backend] [           main] .WebSocketAnnotationMethodMessageHandler : 
+	c.o.b.c.t.TrackingController:
+	
+2026-09-01T20:22:31.976+05:30 DEBUG 13596 --- [offgo-backend] [           main] .WebSocketAnnotationMethodMessageHandler : 
+	c.o.b.c.u.UserController:
+	
+2026-09-01T20:22:31.990+05:30 DEBUG 13596 --- [offgo-backend] [           main] .WebSocketAnnotationMethodMessageHandler : 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2026-09-01T20:22:32.039+05:30 DEBUG 13596 --- [offgo-backend] [           main] .WebSocketAnnotationMethodMessageHandler : 
+	o.s.w.a.OpenApiWebMvcResource:
+	
+2026-09-01T20:22:32.043+05:30 DEBUG 13596 --- [offgo-backend] [           main] .WebSocketAnnotationMethodMessageHandler : 
+	o.s.w.u.SwaggerWelcomeWebMvc:
+	
+2026-09-01T20:22:32.045+05:30 DEBUG 13596 --- [offgo-backend] [           main] .WebSocketAnnotationMethodMessageHandler : 
+	o.s.w.u.SwaggerConfigResource:
+	
+2026-09-01T20:22:32.750+05:30 DEBUG 13596 --- [offgo-backend] [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : 70 mappings in 'requestMappingHandlerMapping'
+2026-09-01T20:22:32.868+05:30 DEBUG 13596 --- [offgo-backend] [           main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**, /swagger-ui/**, /swagger-ui/*swagger-initializer.js, /webjars/*swagger-ui/**, /webjars/*swagger-ui/*swagger-initializer.js, /webjars/*swagger-ui/5.32.0/*swagger-initializer.js] in 'resourceHandlerMapping'
+2026-09-01T20:22:33.007+05:30 DEBUG 13596 --- [offgo-backend] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-09-01T20:22:33.269+05:30 DEBUG 13596 --- [offgo-backend] [           main] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2026-09-01T20:22:33.466+05:30 DEBUG 13596 --- [offgo-backend] [           main] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2026-09-01T20:22:34.238+05:30 DEBUG 13596 --- [offgo-backend] [           main] org.springframework.web.SimpLogging      : clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2026-09-01T20:22:34.239+05:30 DEBUG 13596 --- [offgo-backend] [           main] org.springframework.web.SimpLogging      : clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2026-09-01T20:22:34.240+05:30  INFO 13596 --- [offgo-backend] [           main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2026-09-01T20:22:34.242+05:30 DEBUG 13596 --- [offgo-backend] [           main] org.springframework.web.SimpLogging      : clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@16b5c059]
+2026-09-01T20:22:34.243+05:30 DEBUG 13596 --- [offgo-backend] [           main] org.springframework.web.SimpLogging      : brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@16b5c059]
+2026-09-01T20:22:34.245+05:30  INFO 13596 --- [offgo-backend] [           main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@16b5c059]]
+2026-09-01T20:22:34.248+05:30  INFO 13596 --- [offgo-backend] [           main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2026-09-01T20:22:34.249+05:30 DEBUG 13596 --- [offgo-backend] [           main] org.springframework.web.SimpLogging      : clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2026-09-01T20:22:34.250+05:30 DEBUG 13596 --- [offgo-backend] [           main] org.springframework.web.SimpLogging      : brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2026-09-01T20:22:34.300+05:30  INFO 13596 --- [offgo-backend] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8088 (http) with context path '/'
+2026-09-01T20:22:34.322+05:30  INFO 13596 --- [offgo-backend] [           main] com.offgo.backend.BackendApplication     : Started BackendApplication in 16.663 seconds (process running for 17.555)
+2026-09-01T20:22:34.333+05:30  INFO 13596 --- [offgo-backend] [MessageBroker-1] c.o.backend.scheduler.ShuttleScheduler   : Running scheduled shuttle update...
+Hibernate: 
+    select
+        u1_0.id 
+    from
+        users u1_0 
+    where
+        u1_0.email=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        u1_0.id 
+    from
+        users u1_0 
+    where
+        u1_0.email=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        u1_0.id 
+    from
+        users u1_0 
+    where
+        u1_0.email=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        u1_0.id 
+    from
+        users u1_0 
+    where
+        u1_0.email=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        count(*) 
+    from
+        employees e1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        shuttles s1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        drivers d1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        routes r1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        stops s1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        route_stops rs1_0
+2026-09-01T20:22:34.849+05:30  WARN 13596 --- [offgo-backend] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-09-01T20:22:34.851+05:30  WARN 13596 --- [offgo-backend] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-09-01T20:22:36.138+05:30  INFO 13596 --- [offgo-backend] [nio-8088-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-09-01T20:22:36.141+05:30  INFO 13596 --- [offgo-backend] [nio-8088-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-09-01T20:22:36.142+05:30 DEBUG 13596 --- [offgo-backend] [nio-8088-exec-1] o.s.web.servlet.DispatcherServlet        : Detected StandardServletMultipartResolver
+2026-09-01T20:22:36.145+05:30 DEBUG 13596 --- [offgo-backend] [nio-8088-exec-1] o.s.web.servlet.DispatcherServlet        : Detected AcceptHeaderLocaleResolver
+2026-09-01T20:22:36.146+05:30 DEBUG 13596 --- [offgo-backend] [nio-8088-exec-1] o.s.web.servlet.DispatcherServlet        : Detected FixedThemeResolver
+2026-09-01T20:22:36.149+05:30 DEBUG 13596 --- [offgo-backend] [nio-8088-exec-1] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@59217757
+2026-09-01T20:22:36.150+05:30 DEBUG 13596 --- [offgo-backend] [nio-8088-exec-1] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.support.SessionFlashMapManager@726cda5b
+2026-09-01T20:22:36.152+05:30 DEBUG 13596 --- [offgo-backend] [nio-8088-exec-1] o.s.web.servlet.DispatcherServlet        : enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2026-09-01T20:22:36.153+05:30  INFO 13596 --- [offgo-backend] [nio-8088-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 11 ms
+2026-09-01T20:22:36.207+05:30 DEBUG 13596 --- [offgo-backend] [nio-8088-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/complaints
+2026-09-01T20:22:36.225+05:30 DEBUG 13596 --- [offgo-backend] [nio-8088-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-01T20:22:36.231+05:30 DEBUG 13596 --- [offgo-backend] [nio-8088-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/complaints
+2026-09-01T20:22:36.238+05:30 DEBUG 13596 --- [offgo-backend] [nio-8088-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/api/v1/complaints", parameters={}
+2026-09-01T20:22:36.242+05:30 DEBUG 13596 --- [offgo-backend] [nio-8088-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.offgo.backend.controller.complaint.ComplaintController#getAllComplaints()
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.admin_notes,
+        c1_0.admin_response,
+        c1_0.assigned_to,
+        c1_0.attachment_name,
+        c1_0.category,
+        c1_0.complaint_ref,
+        c1_0.created_at,
+        c1_0.department,
+        c1_0.description,
+        c1_0.priority,
+        c1_0.raised_by,
+        c1_0.raised_by_id,
+        c1_0.role,
+        c1_0.route_name,
+        c1_0.status,
+        c1_0.subject,
+        t1_0.complaint_id,
+        t1_0.action,
+        t1_0.id,
+        t1_0.note,
+        t1_0.performed_by,
+        t1_0.role,
+        t1_0.timestamp,
+        c1_0.updated_at,
+        c1_0.vehicle_number 
+    from
+        complaints c1_0 
+    left join
+        complaint_timeline t1_0 
+            on c1_0.id=t1_0.complaint_id 
+    order by
+        c1_0.created_at desc
+2026-09-01T20:22:36.492+05:30 DEBUG 13596 --- [offgo-backend] [nio-8088-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2026-09-01T20:22:36.522+05:30 DEBUG 13596 --- [offgo-backend] [nio-8088-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ApiResponse(success=true, message=Complaints fetched successfully, data=[ComplaintResponse(id=cba88b (truncated)...]
+2026-09-01T20:22:36.632+05:30 DEBUG 13596 --- [offgo-backend] [nio-8088-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2026-09-01T20:23:04.322+05:30  INFO 13596 --- [offgo-backend] [MessageBroker-1] c.o.backend.scheduler.ShuttleScheduler   : Running scheduled shuttle update...

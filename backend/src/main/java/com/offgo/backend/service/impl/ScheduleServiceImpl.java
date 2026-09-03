@@ -65,6 +65,10 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new IllegalStateException("Shuttle is inactive.");
         }
 
+                shuttle.setTrackingEnabled(false);
+                shuttle.setStatus(com.offgo.backend.enums.ShuttleStatus.INACTIVE);
+                shuttleRepository.save(shuttle);
+
         Schedule schedule = Schedule.builder()
                 .route(route)
                 .driver(driver)

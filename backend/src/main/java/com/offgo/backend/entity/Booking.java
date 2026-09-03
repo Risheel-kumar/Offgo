@@ -1,6 +1,7 @@
 package com.offgo.backend.entity;
 
 import java.time.LocalDateTime;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import com.offgo.backend.enums.BookingStatus;
@@ -40,6 +41,10 @@ public class Booking extends BaseEntity {
 
     @Column(nullable = false)
     private Integer seatNumber;
+
+    @Builder.Default
+    @Column(name = "transport_charge_inr", precision = 10, scale = 2)
+    private BigDecimal transportChargeInr = BigDecimal.ZERO;
 
 
     @Enumerated(EnumType.STRING)

@@ -2,6 +2,7 @@ package com.offgo.backend.security.config;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,6 +31,9 @@ public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+        @Value("${CORS_ALLOWED_ORIGINS:http://localhost:3000}")
+        private String corsAllowedOrigins;
+
     @Bean
     public AuthenticationProvider authenticationProvider() {
 
@@ -55,9 +59,7 @@ public class SecurityConfig {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of(
-                "http://localhost:5173"
-        ));
+        configuration.setAllowedOriginPatterns(List.of(corsAllowedOrigins.split("\\s*,\\s*")));
 
         configuration.setAllowedMethods(List.of(
                 "GET",
@@ -69,7 +71,7 @@ public class SecurityConfig {
         ));
 
         configuration.setAllowedHeaders(List.of("*"));
-
+        configuration.setExposedHeaders(List.of("Authorization", "Link", "X-Total-Count"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source =
@@ -98,6 +100,7 @@ public class SecurityConfig {
 
                          .requestMatchers(
                                 "/api/v1/auth/**",
+                                "/api/v1/users/**",
                                 "/api/v1/drivers/**",
                                 "/api/v1/shuttles/**",
                                 "/api/v1/stops/**",
@@ -117,7 +120,10 @@ public class SecurityConfig {
                                 "/api/v1/attendance/**",
                                 "/api/v1/bookings/**",
                                 "/api/v1/dashboard/**",
-                                "/api/v1/notifications/**"
+                                "/api/v1/notifications/**",
+                                "/api/v1/complaints/**",
+                                "/api/v1/admin/**",
+                                "/error"
                         )
                         .permitAll()
 

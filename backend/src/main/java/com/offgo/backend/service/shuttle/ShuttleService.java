@@ -7,6 +7,7 @@ import com.offgo.backend.dto.request.shuttle.CreateShuttleRequest;
 import com.offgo.backend.dto.request.shuttle.UpdateShuttleRequest;
 import com.offgo.backend.dto.response.ApiResponse;
 import com.offgo.backend.dto.response.shuttle.ShuttleResponse;
+import com.offgo.backend.enums.ShuttleStatus;
 
 public interface ShuttleService {
 
@@ -20,5 +21,9 @@ public interface ShuttleService {
     ApiResponse<ShuttleResponse> updateShuttle(
         UUID id,
         UpdateShuttleRequest request);
+
+        ApiResponse<ShuttleResponse> updateStatus(UUID id, ShuttleStatus status);
+
+        void deleteShuttle(UUID id);
 
 }

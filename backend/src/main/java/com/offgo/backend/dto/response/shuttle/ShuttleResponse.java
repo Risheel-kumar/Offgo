@@ -30,4 +30,16 @@ public class ShuttleResponse {
 
     private Boolean active;
 
+    private UUID routeId;
+
+    private String routeName;
+
+    private UUID driverId;
+
+    private String driverName;
+
+    private String driverPhone;
+
+    private String driverEmail;
+
 }

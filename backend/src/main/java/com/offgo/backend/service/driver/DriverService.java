@@ -16,4 +16,14 @@ public interface DriverService {
 
     ApiResponse<DriverResponse> getDriverById(UUID id);
 
+    ApiResponse<DriverResponse> updateDriver(UUID id, CreateDriverRequest request);
+
+    ApiResponse<DriverResponse> assignShuttle(UUID id, UUID shuttleId);
+
+    ApiResponse<DriverResponse> startNavigation(UUID id);
+
+    ApiResponse<DriverResponse> stopNavigation(UUID id);
+
+    void deleteDriver(UUID id);
+
 }

@@ -38,6 +38,9 @@ public class DriverMapper {
                 .experience(driver.getExperience())
                 .status(driver.getStatus())
                 .active(driver.isActive())
+                .shuttleId(driver.getShuttle() != null ? driver.getShuttle().getId() : null)
+                .shuttleNumber(driver.getShuttle() != null ? driver.getShuttle().getVehicleNumber() : null)
+                .createdAt(driver.getCreatedAt())
                 .build();
 
     }

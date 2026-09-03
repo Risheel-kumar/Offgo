@@ -1,5 +1,7 @@
 package com.offgo.backend.dto.request.shuttle;
 
+import java.util.UUID;
+
 import com.offgo.backend.enums.VehicleType;
 
 import jakarta.validation.constraints.Min;
@@ -22,5 +24,7 @@ public class CreateShuttleRequest {
     @NotNull(message = "Capacity is required")
     @Min(value = 1, message = "Capacity must be at least 1")
     private Integer capacity;
+
+    private UUID routeId;
 
 }

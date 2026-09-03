@@ -1,6 +1,7 @@
 package com.offgo.backend.dto.response.employee;
 
 import java.util.UUID;
+import java.time.LocalDateTime;
 
 import com.offgo.backend.enums.Department;
 
@@ -26,5 +27,9 @@ public class EmployeeResponse {
     private Department department;
 
     private boolean active;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
 }

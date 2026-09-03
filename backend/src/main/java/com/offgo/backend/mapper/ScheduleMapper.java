@@ -12,6 +12,10 @@ public class ScheduleMapper {
 
         return ScheduleResponse.builder()
                 .id(schedule.getId())
+                .routeId(schedule.getRoute().getId())
+                .driverId(schedule.getDriver().getId())
+                .shuttleId(schedule.getShuttle().getId())
+                .trackingEnabled(schedule.getShuttle().isTrackingEnabled())
                 .routeName(schedule.getRoute().getRouteName())
                 .driverName(
                         schedule.getDriver().getFirstName()

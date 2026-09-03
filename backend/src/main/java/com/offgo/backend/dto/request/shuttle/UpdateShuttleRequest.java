@@ -1,5 +1,7 @@
 package com.offgo.backend.dto.request.shuttle;
 
+import java.util.UUID;
+
 import com.offgo.backend.enums.ShuttleStatus;
 import com.offgo.backend.enums.VehicleType;
 
@@ -26,5 +28,7 @@ public class UpdateShuttleRequest {
 
     @NotNull(message = "Status is required")
     private ShuttleStatus status;
+
+    private UUID routeId;
 
 }

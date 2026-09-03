@@ -35,6 +35,8 @@ public class RouteMapper {
                 .estimatedDurationMinutes(route.getEstimatedDurationMinutes())
                 .status(route.getStatus())
                 .active(route.isActive())
+                .driverId(route.getDriver() != null ? route.getDriver().getId() : null)
+                .driverName(route.getDriver() != null ? route.getDriver().getFirstName() + " " + route.getDriver().getLastName() : null)
                 .build();
 
     }

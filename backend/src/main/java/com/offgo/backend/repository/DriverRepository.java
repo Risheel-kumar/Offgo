@@ -20,4 +20,6 @@ public interface DriverRepository
 
     Optional<Driver> findByEmployeeId(String employeeId);
 
+    Optional<Driver> findByShuttleId(UUID shuttleId);
+
 }

@@ -101,6 +101,36 @@ public class GlobalExceptionHandler {
                 .body(response);
     }
 
+    @ExceptionHandler({
+            org.springframework.security.authentication.BadCredentialsException.class,
+            org.springframework.security.core.userdetails.UsernameNotFoundException.class,
+            org.springframework.security.core.AuthenticationException.class
+    })
+    public ResponseEntity<ApiResponse<Object>> handleAuthenticationException(Exception ex) {
+        ApiResponse<Object> response = ApiResponse.builder()
+                .success(false)
+                .message("Invalid email or password. If you do not have an account, please register first.")
+                .data(null)
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(response);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiResponse<Object>> handleIllegalArgument(IllegalArgumentException ex) {
+        ApiResponse<Object> response = ApiResponse.builder()
+                .success(false)
+                .message(ex.getMessage())
+                .data(null)
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.badRequest()
+                .body(response);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Object>> handleException(
             Exception ex) {
@@ -108,7 +138,7 @@ public class GlobalExceptionHandler {
         ApiResponse<Object> response =
                 ApiResponse.builder()
                         .success(false)
-                        .message("Internal Server Error")
+                        .message(ex.getMessage() != null ? ex.getMessage() : "Internal Server Error")
                         .data(null)
                         .timestamp(LocalDateTime.now())
                         .build();

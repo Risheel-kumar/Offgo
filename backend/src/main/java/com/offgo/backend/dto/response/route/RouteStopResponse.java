@@ -17,6 +17,12 @@ public class RouteStopResponse {
 
     private String stopName;
 
+    private String address;
+
+    private Double latitude;
+
+    private Double longitude;
+
     private Integer stopOrder;
 
     private Integer estimatedArrivalOffsetMinutes;

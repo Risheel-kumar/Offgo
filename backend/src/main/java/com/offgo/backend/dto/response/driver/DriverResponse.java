@@ -1,6 +1,7 @@
 package com.offgo.backend.dto.response.driver;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.offgo.backend.enums.DriverStatus;
@@ -33,5 +34,11 @@ public class DriverResponse {
     private DriverStatus status;
 
     private boolean active;
+
+    private UUID shuttleId;
+
+    private String shuttleNumber;
+
+    private LocalDateTime createdAt;
 
 }

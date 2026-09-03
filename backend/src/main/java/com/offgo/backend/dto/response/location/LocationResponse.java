@@ -15,6 +15,10 @@ public class LocationResponse {
 
     private Double longitude;
 
+    private Double speed;
+
+    private Double heading;
+
     private LocalDateTime updatedAt;
 
 }

@@ -32,6 +32,8 @@ public class EmployeeMapper {
                 .phoneNumber(employee.getPhoneNumber())
                 .department(employee.getDepartment())
                 .active(employee.isActive())
+                .createdAt(employee.getCreatedAt())
+                .updatedAt(employee.getUpdatedAt())
                 .build();
     }
 }

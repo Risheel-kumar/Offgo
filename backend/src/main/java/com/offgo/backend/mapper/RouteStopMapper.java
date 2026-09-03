@@ -15,6 +15,9 @@ public class RouteStopMapper {
                 .stopId(routeStop.getStop().getId())
                 .stopCode(routeStop.getStop().getStopCode())
                 .stopName(routeStop.getStop().getStopName())
+                .address(routeStop.getStop().getAddress())
+                .latitude(routeStop.getStop().getLatitude())
+                .longitude(routeStop.getStop().getLongitude())
                 .stopOrder(routeStop.getStopOrder())
                 .estimatedArrivalOffsetMinutes(
                         routeStop.getEstimatedArrivalOffsetMinutes())

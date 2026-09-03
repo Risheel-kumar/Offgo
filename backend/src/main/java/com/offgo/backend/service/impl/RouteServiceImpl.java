@@ -12,6 +12,7 @@ import com.offgo.backend.dto.response.route.RouteResponse;
 import com.offgo.backend.entity.Route;
 import com.offgo.backend.exception.ResourceNotFoundException;
 import com.offgo.backend.mapper.RouteMapper;
+import com.offgo.backend.repository.DriverRepository;
 import com.offgo.backend.repository.RouteRepository;
 import com.offgo.backend.service.route.RouteService;
 import com.offgo.backend.validator.RouteValidator;
@@ -25,6 +26,7 @@ public class RouteServiceImpl implements RouteService {
     private final RouteRepository routeRepository;
     private final RouteMapper routeMapper;
     private final RouteValidator routeValidator;
+        private final DriverRepository driverRepository;
 
     @Override
     public ApiResponse<RouteResponse> createRoute(CreateRouteRequest request) {
@@ -32,6 +34,10 @@ public class RouteServiceImpl implements RouteService {
         routeValidator.validateCreate(request);
         log.info("Creating route {}", request.getRouteCode());
         Route route = routeMapper.toEntity(request);
+        if (request.getDriverId() != null) {
+            route.setDriver(driverRepository.findById(request.getDriverId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Driver not found")));
+        }
 
         Route savedRoute = routeRepository.save(route);
         log.info("Route saved {}", savedRoute.getId());
@@ -83,6 +89,8 @@ public class RouteServiceImpl implements RouteService {
                         new ResourceNotFoundException("Route not found"));
 
         routeMapper.updateEntity(route, request);
+        route.setDriver(request.getDriverId() == null ? null : driverRepository.findById(request.getDriverId())
+                .orElseThrow(() -> new ResourceNotFoundException("Driver not found")));
 
         Route updatedRoute = routeRepository.save(route);
 
