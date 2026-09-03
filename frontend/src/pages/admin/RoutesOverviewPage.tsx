@@ -99,6 +99,7 @@ export const RoutesOverviewPage: React.FC = () => {
     code: '', name: '', source: { text: '', lat: 0, lng: 0 } as LocationValue,
     destination: { text: '', lat: 0, lng: 0 } as LocationValue, driverId: '',
   });
+  const autoOrderedRouteRef = React.useRef<string | null>(null);
 
   useEffect(() => {
     stopService.getStops().then(setStops).catch(() => setStops([]));
@@ -244,38 +245,20 @@ export const RoutesOverviewPage: React.FC = () => {
   const reorderStopsByDistance = async (stopsToOrder = routeStops, showError = true) => {
     if (!routeId || stopsToOrder.length < 2 || !route?.startPoint) return;
     try {
-      let source: { lat: number; lng: number } = { lat: route.startPoint.lat, lng: route.startPoint.lng };
-      let destination: { lat: number; lng: number } = { lat: route.destination.lat, lng: route.destination.lng };
-      if ((!source.lat || !source.lng || !destination.lat || !destination.lng) && window.google?.maps) {
-        const geocoder = new google.maps.Geocoder();
-        const [sourceResult, destinationResult] = await Promise.all([
-          geocoder.geocode({ address: route.startPoint.address || route.startPoint.name }),
-          geocoder.geocode({ address: route.destination.address || route.destination.name }),
-        ]);
-        const sourceLocation = sourceResult.results[0]?.geometry.location;
-        const destinationLocation = destinationResult.results[0]?.geometry.location;
-        if (sourceLocation) source = { lat: sourceLocation.lat(), lng: sourceLocation.lng() };
-        if (destinationLocation) destination = { lat: destinationLocation.lat(), lng: destinationLocation.lng() };
-      }
-
-      let ordered = [...stopsToOrder].sort((first, second) => {
-        const firstDistance = Math.hypot(first.lat - source.lat, first.lng - source.lng);
-        const secondDistance = Math.hypot(second.lat - source.lat, second.lng - source.lng);
-        return firstDistance - secondDistance;
-      });
-      if (window.google?.maps && source.lat && source.lng && destination.lat && destination.lng) {
-        const result = await new Promise<google.maps.DirectionsResult | null>((resolve) => {
-          new google.maps.DirectionsService().route({
-            origin: source,
-            destination,
-            waypoints: stopsToOrder.map((stop) => ({ location: { lat: stop.lat, lng: stop.lng }, stopover: true })),
-            optimizeWaypoints: true,
-            travelMode: google.maps.TravelMode.DRIVING,
-          }, (directions, status) => resolve(status === google.maps.DirectionsStatus.OK ? directions || null : null));
-        });
-        const waypointOrder = result?.routes[0]?.waypoint_order;
-        if (waypointOrder) ordered = waypointOrder.map((index) => stopsToOrder[index]);
-      }
+      const source = route.startPoint;
+      if (!Number.isFinite(source.lat) || !Number.isFinite(source.lng) || (source.lat === 0 && source.lng === 0)) return;
+      const toRadians = (value: number) => value * Math.PI / 180;
+      const distanceFromSource = (stop: AssignedRouteStop) => {
+        if (!Number.isFinite(stop.lat) || !Number.isFinite(stop.lng) || (stop.lat === 0 && stop.lng === 0)) return Number.POSITIVE_INFINITY;
+        const latitudeDelta = toRadians(stop.lat - source.lat);
+        const longitudeDelta = toRadians(stop.lng - source.lng);
+        const latitudeOne = toRadians(source.lat);
+        const latitudeTwo = toRadians(stop.lat);
+        const haversine = Math.sin(latitudeDelta / 2) ** 2
+          + Math.cos(latitudeOne) * Math.cos(latitudeTwo) * Math.sin(longitudeDelta / 2) ** 2;
+        return 6371 * 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
+      };
+      const ordered = [...stopsToOrder].sort((first, second) => distanceFromSource(first) - distanceFromSource(second));
 
       const reorderedStops = await reorderStopMutation.mutateAsync({ routeId, stopIdsInOrder: ordered.map((stop) => stop.stopId) });
       queryClient.setQueryData([ROUTE_STOPS_QUERY_KEY, routeId], reorderedStops);
@@ -286,6 +269,12 @@ export const RoutesOverviewPage: React.FC = () => {
       }
     }
   };
+
+  useEffect(() => {
+    if (!routeId || !route?.startPoint || areStopsLoading || routeStops.length < 2 || autoOrderedRouteRef.current === routeId) return;
+    autoOrderedRouteRef.current = routeId;
+    void reorderStopsByDistance(routeStops, false);
+  }, [routeId, route?.startPoint, areStopsLoading, routeStops]);
 
   const removeStop = async (stopId: string) => {
     if (!routeId || !window.confirm('Remove this stop from the route?')) return;
