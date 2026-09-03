@@ -303,6 +303,7 @@ export const SeatSelectionPage: React.FC = () => {
         shuttleId: selectedVehicle?.id || currentRoute.assignedShuttle?.id || 'live-shuttle',
         shuttleNumber: shuttleNumberDisplay || selectedVehicle?.vehicleNumber || currentRoute.assignedShuttle?.vehicleNumber || 'OFF-GO',
         travelDate,
+        scheduleId: selectedSchedule?.id || selectedScheduleId,
         shiftTime: selectedShift || selectedSchedule?.departureTime || 'Departure time',
         pickupStopId: pickupStopId || pickupObj?.id || 'pickup-stop',
         pickupStopName: pickupObj ? pickupObj.name : boardingStopName || 'Selected Stop',
@@ -311,6 +312,8 @@ export const SeatSelectionPage: React.FC = () => {
         seatNumber: selectedSeat.seatNumber,
         seatCategory: selectedSeat.category,
         employeeId: user?.id || user?.employeeId || 'emp-curr-01',
+        employeeCode: user?.employeeId || '',
+        employeeEmail: user?.email || '',
         employeeName: user?.name || user?.email || 'Employee',
       };
 

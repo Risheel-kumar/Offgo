@@ -1,4 +1,5 @@
 import { ShuttleSeatLayout, SeatItem, SeatStatus, SeatCategory, SeatBookingPayload } from '../types';
+import apiClient from '../api/axios';
 
 /**
  * Helper to generate realistic seating layout for various shuttle models
@@ -202,6 +203,27 @@ export const seatService = {
     passId: string;
     message: string;
   }> {
+    if (!payload.scheduleId) {
+      throw new Error('No schedule was selected for this shuttle.');
+    }
+
+    const employeesResponse = await apiClient.get('/employees');
+    const employees = employeesResponse.data?.data ?? employeesResponse.data ?? [];
+    const employee = employees.find((candidate: any) =>
+      String(candidate.employeeCode ?? '').toLowerCase() === String(payload.employeeCode ?? '').toLowerCase()
+      || String(candidate.email ?? '').toLowerCase() === String(payload.employeeEmail ?? '').toLowerCase()
+    );
+
+    if (!employee?.id) {
+      throw new Error('Your employee profile is not configured in the employee directory.');
+    }
+
+    const response = await apiClient.post('/bookings', {
+      employeeId: employee.id,
+      scheduleId: payload.scheduleId,
+    });
+    const booking = response.data?.data ?? response.data;
+
     // Validate availability
     const check = await this.validateSeatAvailability(payload.shuttleId, payload.seatNumber);
     if (!check.available) {
@@ -233,8 +255,8 @@ export const seatService = {
       layoutCache[payload.shuttleId].reservedCount = stats.bookedSeats;
     }
 
-    const bookingCode = `BK-${Math.floor(100000 + Math.random() * 900000)}`;
-    const passId = `PASS-${Math.floor(1000 + Math.random() * 9000)}`;
+    const bookingCode = booking.bookingRef || `BOOK-${booking.id}`;
+    const passId = String(booking.id);
 
     return {
       success: true,

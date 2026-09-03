@@ -16,9 +16,10 @@ public class BookingValidator {
 
     public void validate(CreateBookingRequest request) {
 
-        if (bookingRepository.existsByEmployeeIdAndScheduleId(
+        if (bookingRepository.existsByEmployeeIdAndScheduleIdAndStatusNot(
                 request.getEmployeeId(),
-                request.getScheduleId())) {
+            request.getScheduleId(),
+            com.offgo.backend.enums.BookingStatus.CANCELLED)) {
 
             throw new BadRequestException(
                     "Employee already booked this schedule.");

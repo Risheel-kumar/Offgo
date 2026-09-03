@@ -57,6 +57,7 @@ export const useConfirmBooking = () => {
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['seatLayout', variables.shuttleId] });
       queryClient.invalidateQueries({ queryKey: ['bookings'] });
+      queryClient.invalidateQueries({ queryKey: ['my_upcoming_bookings'] });
       toast.success(data.message);
     },
     onError: (error: Error) => {

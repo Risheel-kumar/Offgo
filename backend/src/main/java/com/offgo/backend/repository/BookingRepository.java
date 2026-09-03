@@ -1,13 +1,11 @@
 package com.offgo.backend.repository;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.offgo.backend.enums.BookingStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.Optional;
+
 import com.offgo.backend.entity.Booking;
 import com.offgo.backend.enums.BookingStatus;
 
@@ -20,9 +18,10 @@ public interface BookingRepository
     
     long countByScheduleId(UUID scheduleId);
 
-    boolean existsByEmployeeIdAndScheduleId(
+    boolean existsByEmployeeIdAndScheduleIdAndStatusNot(
             UUID employeeId,
-            UUID scheduleId);
+            UUID scheduleId,
+            BookingStatus status);
 
     List<Booking> findByScheduleIdAndStatus(
             UUID scheduleId,

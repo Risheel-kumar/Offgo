@@ -1283,6 +1283,7 @@ export interface SeatBookingPayload {
   routeName: string;
   shuttleId: string;
   shuttleNumber: string;
+  scheduleId?: string;
   travelDate: string;
   shiftTime: string;
   pickupStopId: string;
@@ -1293,6 +1294,8 @@ export interface SeatBookingPayload {
   seatCategory: SeatCategory;
   employeeId: string;
   employeeName: string;
+  employeeCode?: string;
+  employeeEmail?: string;
   notes?: string;
 }
 

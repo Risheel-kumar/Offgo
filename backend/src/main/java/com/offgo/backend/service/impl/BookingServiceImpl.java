@@ -1,7 +1,7 @@
 package com.offgo.backend.service.impl;
 
-import java.time.LocalDateTime;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -26,6 +26,7 @@ import com.offgo.backend.repository.BookingRepository;
 import com.offgo.backend.repository.EmployeeRepository;
 import com.offgo.backend.repository.ScheduleRepository;
 import com.offgo.backend.repository.ShuttleRepository;
+import com.offgo.backend.repository.UserRepository;
 import com.offgo.backend.service.booking.BookingService;
 import com.offgo.backend.service.notification.NotificationService;
 import com.offgo.backend.validator.BookingValidator;
@@ -46,6 +47,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingMapper bookingMapper;
     private final BookingValidator bookingValidator;
     private final NotificationService notificationService;
+        private final UserRepository userRepository;
 
         private BookingResponse mapBookingSafely(Booking booking) {
                 try {
@@ -58,9 +60,12 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public ApiResponse<BookingResponse> createBooking(CreateBookingRequest request) {
+        Employee employee = employeeRepository.findById(request.getEmployeeId()).orElseGet(() ->
+                userRepository.findById(request.getEmployeeId())
+                        .flatMap(user -> employeeRepository.findByEmployeeCode(user.getEmployeeId()))
+                        .orElseThrow(() -> new ResourceNotFoundException("Employee not found")));
+        request.setEmployeeId(employee.getId());
         bookingValidator.validate(request);
-        Employee employee = employeeRepository.findById(request.getEmployeeId())
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
         Schedule schedule = scheduleRepository.findById(request.getScheduleId())
                 .orElseThrow(() -> new ResourceNotFoundException("Schedule not found"));
         Shuttle shuttle = schedule.getShuttle();
